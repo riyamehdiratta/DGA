@@ -1,0 +1,28 @@
+{
+  "time_period": 30,
+  "num_samples": 5,
+  "transformer_age": null,
+  "initial_data": {
+    "O2": 0,
+    "N2": 0,
+    "H2": 5,
+    "CO2": 1452,
+    "CO": 45,
+    "C2H4": 3,
+    "C2H6": 9,
+    "CH4": 2,
+    "C2H2": 3
+  },
+  "final_data": {
+    "O2": 0,
+    "N2": 0,
+    "H2": 1,
+    "CO2": 1397,
+    "CO": 61,
+    "C2H4": 3,
+    "C2H6": 6,
+    "CH4": 3,
+    "C2H2": 2
+  },
+  "timestamp": "2025-06-29T00:44:45.904669"
+}

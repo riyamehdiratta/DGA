@@ -1,0 +1,8 @@
+Gas,O2/N2 Ratio <= 0.2,O2/N2 Ratio > 0.2
+Hydrogen (H2),40,25
+Methane (CH4),30,10
+Ethane (C2H6),25,7
+Ethylene (C2H4),20,
+Acetylene (C2H2),Any Increase,
+Carbon monoxide (CO),250,175
+Carbon dioxide (CO2),2500,1750
