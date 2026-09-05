@@ -32,3 +32,4 @@ backend/backups/
 *.njsproj
 *.sln
 *.sw?
+node_modules
