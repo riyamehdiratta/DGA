@@ -1,0 +1,159 @@
+@import "tailwindcss";
+
+@theme {
+  --color-border: #d1d5db;
+  --color-muted: #6b7280;
+  --color-surface: #f9fafb;
+  --color-accent: #0f4c81;
+  --color-status-normal: #059669;
+  --color-status-caution: #d97706;
+  --color-status-warning: #dc2626;
+  --color-status-critical: #991b1b;
+  --color-status-pending: #9ca3af;
+}
+
+@layer base {
+  body {
+    @apply bg-white text-gray-900 antialiased;
+    font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    font-size: 14px;
+    line-height: 1.5;
+  }
+
+  input,
+  select,
+  textarea {
+    @apply border border-gray-300 bg-white text-gray-900;
+  }
+
+  input:focus,
+  select:focus,
+  textarea:focus {
+    @apply outline-none ring-1 ring-gray-400 border-gray-400;
+  }
+}
+
+@layer utilities {
+  /* One-shot entrance for tab panels and cards — subtle, professional. */
+  @keyframes rise-in {
+    from {
+      opacity: 0;
+      transform: translateY(6px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .anim-rise {
+    animation: rise-in 240ms ease-out both;
+  }
+
+  /* One-shot backdrop fade for the expanded-diagram modal. */
+  @keyframes fade-in {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+
+  .anim-fade {
+    animation: fade-in 180ms ease-out both;
+  }
+
+  /* One-shot pop for the Duval sample marker. */
+  @keyframes marker-pop {
+    0% {
+      transform: scale(0);
+      opacity: 0;
+    }
+    70% {
+      transform: scale(1.35);
+      opacity: 1;
+    }
+    100% {
+      transform: scale(1);
+      opacity: 1;
+    }
+  }
+
+  .anim-marker {
+    transform-box: fill-box;
+    transform-origin: center;
+    animation: marker-pop 480ms 200ms ease-out both;
+  }
+
+  /* One-shot expanding halo around the Duval sample marker (no looping). */
+  @keyframes marker-ring-out {
+    0% {
+      transform: scale(0.25);
+      opacity: 0;
+    }
+    55% {
+      opacity: 0.55;
+    }
+    100% {
+      transform: scale(1);
+      opacity: 0.35;
+    }
+  }
+
+  .anim-marker-ring {
+    transform-box: fill-box;
+    transform-origin: center;
+    animation: marker-ring-out 650ms 320ms ease-out both;
+  }
+
+  /* Gentle looping pulse for the selected anatomy hotspot (Learn section). */
+  @keyframes hotspot-ring-pulse {
+    0% {
+      transform: scale(1);
+      opacity: 0.6;
+    }
+    70% {
+      transform: scale(1.9);
+      opacity: 0;
+    }
+    100% {
+      transform: scale(1.9);
+      opacity: 0;
+    }
+  }
+
+  .anim-hotspot-ring {
+    transform-box: fill-box;
+    transform-origin: center;
+    animation: hotspot-ring-pulse 2s ease-out infinite;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .anim-rise,
+    .anim-fade,
+    .anim-marker,
+    .anim-marker-ring,
+    .anim-hotspot-ring {
+      animation: none;
+    }
+  }
+
+  /* Keep zone fills in print/PDF export — the diagrams are meaningless without them. */
+  .duval-diagram {
+    print-color-adjust: exact;
+    -webkit-print-color-adjust: exact;
+  }
+}
+
+@media print {
+  .no-print {
+    display: none !important;
+  }
+
+  .print-area {
+    border: none !important;
+    box-shadow: none !important;
+    padding: 0 !important;
+  }
+}

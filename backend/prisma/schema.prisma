@@ -1,0 +1,130 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum UserRole {
+  ADMIN
+  ENGINEER
+}
+
+model User {
+  id           String   @id @default(cuid())
+  email        String   @unique
+  passwordHash String
+  role         UserRole @default(ENGINEER)
+  designation  String?
+  substationType String?
+  substationArea String?
+  isActive     Boolean  @default(true)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  auditLogs AuditLog[]
+
+  @@map("users")
+}
+
+model AuditLog {
+  id         String   @id @default(cuid())
+  userId     String?
+  action     String
+  targetType String?
+  targetId   String?
+  metadata   Json?
+  createdAt  DateTime @default(now())
+
+  user User? @relation(fields: [userId], references: [id], onDelete: SetNull)
+
+  @@index([userId])
+  @@index([createdAt])
+  @@index([action])
+  @@map("audit_logs")
+}
+
+model Transformer {
+  id                String   @id @default(cuid())
+  transformerName   String
+  serialNumber      String
+  equipmentId       String
+  substation        String
+  manufacturer      String
+  voltageRating     String
+  mvaRating         String
+  commissioningDate DateTime @db.Date
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+
+  samples  DgaSample[]
+  analyses AnalysisResult[]
+
+  @@map("transformers")
+}
+
+model DgaSample {
+  id            String   @id @default(cuid())
+  transformerId String
+  sampleDate    DateTime @db.Date
+  h2            Float
+  ch4           Float
+  c2h6          Float
+  c2h4          Float
+  c2h2          Float
+  co            Float
+  co2           Float
+  o2            Float?
+  n2            Float?
+  remarks       String   @default("")
+  createdAt     DateTime @default(now())
+
+  transformer Transformer     @relation(fields: [transformerId], references: [id], onDelete: Cascade)
+  analysis    AnalysisResult?
+
+  @@index([transformerId])
+  @@map("dga_samples")
+}
+
+model AnalysisResult {
+  id                   String   @id @default(cuid())
+  transformerId        String
+  sampleId             String   @unique
+  normProfile          String
+  o2n2Ratio            Float?
+  status               String?
+  statusResult         Json?
+  rateResult           Json?
+  keyGasResult         Json?
+  doernenburgResult    Json?
+  duvalTriangleResult  Json?
+  duvalPentagon1Result Json?
+  duvalPentagon2Result Json?
+  recommendationResult Json?
+  createdAt            DateTime @default(now())
+
+  transformer Transformer @relation(fields: [transformerId], references: [id], onDelete: Cascade)
+  sample      DgaSample   @relation(fields: [sampleId], references: [id], onDelete: Cascade)
+  delta       DeltaResult?
+
+  @@index([transformerId])
+  @@map("analysis_results")
+}
+
+model DeltaResult {
+  id         String @id @default(cuid())
+  analysisId String @unique
+  h2Delta    Float?
+  ch4Delta   Float?
+  c2h6Delta  Float?
+  c2h4Delta  Float?
+  c2h2Delta  Float?
+  coDelta    Float?
+  co2Delta   Float?
+
+  analysis AnalysisResult @relation(fields: [analysisId], references: [id], onDelete: Cascade)
+
+  @@map("delta_results")
+}

@@ -1,0 +1,16 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: dga-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: dga
+      POSTGRES_PASSWORD: dga_secret
+      POSTGRES_DB: dga_analysis
+    ports:
+      - "5433:5432"
+    volumes:
+      - dga_postgres_data:/var/lib/postgresql/data
+
+volumes:
+  dga_postgres_data:
